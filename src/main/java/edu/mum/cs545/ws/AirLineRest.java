@@ -8,6 +8,11 @@ import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.JSONObject;
+
+//import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +27,14 @@ public class AirLineRest {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postStudentRecord(Airline airline){
+    public Response   postStudentRecord(Airline airline){
 
         airlineService.create(airline);
-        String result = "Record entered: "+ airline;
+        JSONObject json = new JSONObject();
 
-        return Response.status(201).entity(result).build();
+        json.put("status", "success");
+        json.put("code", Response.Status.OK.getStatusCode());
+        return Response.ok(json.toString()).build();
 
     }
 
@@ -36,9 +43,14 @@ public class AirLineRest {
     @Path("/allAirLines")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Airline> getAllAirLines() {
-
-        return airlineService.findAll();
+    public Response getAllAirLines() {
+    	  JSONObject json = new JSONObject();
+    	 json.put("status", "success");
+         json.put("code", Response.Status.OK.getStatusCode());
+         json.put("airlines", airlineService.findAll());
+         return Response.ok(json.toString()).build();
+    	
+       
     }
 
 }

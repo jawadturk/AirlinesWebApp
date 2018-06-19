@@ -1,6 +1,7 @@
 package cs545.airline.model;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(name="Airline_Name",columnNames={"name"}))
 public class Airline {
@@ -61,6 +64,8 @@ public class Airline {
 		}
 		return success;
 	}
+
+	
 
 	public boolean removeFlight(Flight flight) {
 		boolean success = false;
