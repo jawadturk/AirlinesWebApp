@@ -3,6 +3,7 @@ package edu.mum.cs545.ws;
 import cs545.airline.model.Airplane;
 import cs545.airline.model.Flight;
 import cs545.airline.service.AirplaneService;
+import cs545.airline.service.FlightService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +29,9 @@ public class AirPlaneRest {
     @Inject
     private AirplaneService airPlaneService;
 
+    @Inject
+    private FlightService flightService;
+    
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,6 +39,11 @@ public class AirPlaneRest {
     public Response   createAirPlane(Airplane airPlane){
 
     	airPlaneService.create(airPlane);
+    	for(int i=0;i<airPlane.getFlights().size();i++)
+    	{
+    		flightService.create(airPlane.getFlights().get(i));	
+    	}
+    	
         JSONObject json = new JSONObject();
 
         json.put("status", "success");
