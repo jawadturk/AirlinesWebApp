@@ -1,6 +1,7 @@
 package cs545.airline.model;
 
 import java.text.DateFormat;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -11,7 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+
+@XmlRootElement 
 @Entity
 public class Flight {
 	@Id
