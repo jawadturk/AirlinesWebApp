@@ -21,7 +21,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -37,6 +38,7 @@ import java.util.Locale;
 @Named
 @Path("flight")
 public class FlightRest {
+	 ObjectMapper mapper = new ObjectMapper();
     private static DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT,
             Locale.US);
     @Inject
@@ -61,7 +63,13 @@ public class FlightRest {
     	  JSONObject json = new JSONObject();
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-         json.put("flights", flightService.findAll());
+         try {
+			json.put("flights",mapper.writeValueAsString(flightService.findAll()) );
+		} catch (JSONException | JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 json.put("error", e.toString());
+		}
          return Response.ok(json.toString()).build();
     	
        

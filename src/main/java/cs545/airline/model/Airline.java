@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 
-@XmlRootElement
+
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(name="Airline_Name",columnNames={"name"}))
 public class Airline {

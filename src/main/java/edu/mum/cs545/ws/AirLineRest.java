@@ -43,12 +43,14 @@ public class AirLineRest {
 	    
 	    @Inject
 	    private AirplaneService airPlaneService;
-	    @Path("/create")
+	    
+	@Path("/create")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(AirlineCreationRequest airlineReq) {
-        try {
+		 JSONObject json = new JSONObject();
+		try {
             Airline airlineObj = new Airline();
             airlineObj.setName(airlineReq.getAirlineName());
 
@@ -74,9 +76,9 @@ public class AirLineRest {
 
             airlineService.create(airlineObj);
         } catch (Exception ex) {
-          
+          json.put("error", ex.toString());
         }
-        JSONObject json = new JSONObject();
+       
 
         json.put("status", "success");
         json.put("code", Response.Status.OK.getStatusCode());
