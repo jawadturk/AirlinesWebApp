@@ -20,7 +20,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 //import org.json.JSONObject;
@@ -31,6 +32,7 @@ import java.util.List;
 @Named
 @Path("airline")
 public class AirLineRest {
+	 ObjectMapper mapper = new ObjectMapper();
 
 	 @Inject
 	    private FlightService flightService;
@@ -95,7 +97,14 @@ public class AirLineRest {
     	  JSONObject json = new JSONObject();
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-         json.put("airlines", airlineService.findAll());
+        
+         try {
+ 			json.put("airlines",mapper.writeValueAsString(airlineService.findAll()) );
+ 		} catch (JSONException | JsonProcessingException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 			 json.put("error", e.toString());
+ 		}
          return Response.ok(json.toString()).build();
     	
        

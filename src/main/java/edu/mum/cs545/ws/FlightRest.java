@@ -65,7 +65,7 @@ public class FlightRest {
          json.put("code", Response.Status.OK.getStatusCode());
          try {
 			json.put("flights",mapper.writeValueAsString(flightService.findAll()) );
-		} catch (JSONException | JsonProcessingException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			 json.put("error", e.toString());
@@ -85,6 +85,22 @@ public class FlightRest {
        
     }
     
+    
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response   deleteAirport(@PathParam("id") long id){
+
+    	Flight flight= new Flight();
+    	flight.setId(id);
+    	flightService.delete(flight);
+        JSONObject json = new JSONObject();
+
+        json.put("status", "success");
+        json.put("code", Response.Status.OK.getStatusCode());
+        return Response.ok(json.toString()).build();
+
+    }
     @PUT
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -111,8 +127,16 @@ public class FlightRest {
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-		 json.put("flights", gson.toJson(flightService.find(flight)));
+	
 		
+		   try {
+				json.put("flights",mapper.writeValueAsString(flightService.find(flight)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
+		 
          return Response.ok(json.toString()).build();
     	
        
@@ -126,9 +150,17 @@ public class FlightRest {
     	  Gson gson = new Gson();
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-         json.put("flights", flightService.findByNumber(flightnr));
+         try {
+				json.put("flights",mapper.writeValueAsString(flightService.findByNumber(flightnr)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
+		 
          return Response.ok(json.toString()).build();
     	
+         
        
     }
     
@@ -138,13 +170,19 @@ public class FlightRest {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getFlightByAirLine(Airline airLine) {
     	  JSONObject json = new JSONObject();
-          Gson gson = new Gson();
+         
 
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-		 json.put("flights", flightService.findByAirline(airLine));
 		
+		 try {
+				json.put("flights",mapper.writeValueAsString(flightService.findByAirline(airLine)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
          return Response.ok(json.toString()).build();
     	
        
@@ -162,8 +200,14 @@ public class FlightRest {
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-		 json.put("flights", flightService.findByOrigin(airport));
 		
+		 try {
+				json.put("flights",mapper.writeValueAsString(flightService.findByOrigin(airport)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
          return Response.ok(json.toString()).build();
     }
     
@@ -179,7 +223,14 @@ public class FlightRest {
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-		 json.put("flights", flightService.findByDestination(airport));
+         
+         try {
+				json.put("flights",mapper.writeValueAsString(flightService.findByDestination(airport)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
 		
          return Response.ok(json.toString()).build();
     }
@@ -196,8 +247,13 @@ public class FlightRest {
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-		 json.put("flights", flightService.findByAirplane(airplane));
-		
+		 try {
+				json.put("flights",mapper.writeValueAsString(flightService.findByAirplane(airplane)) );
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 json.put("error", e.toString());
+			}
          return Response.ok(json.toString()).build();
     }
     
@@ -211,10 +267,11 @@ public class FlightRest {
           Date date;
 		try {
 			date = df.parse(arrivalDate.toString().replace("-", "/"));
-			 json.put("flights", flightService.findByArrival(date));
-		} catch (ParseException e) {
+			json.put("flights",mapper.writeValueAsString(flightService.findByArrival(date))  );
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			json.put("error", e.toString());
 		}
 
     	 json.put("status", "success");
@@ -234,10 +291,11 @@ public class FlightRest {
           Date date;
   		try {
   			date = df.parse(departureDate.toString().replace("-", "/"));
-  			 json.put("flights", flightService.findByDeparture(date));
-  		} catch (ParseException e) {
+  			 json.put("flights",mapper.writeValueAsString( flightService.findByDeparture(date)));
+  		} catch (Exception e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
+  			json.put("error", e.toString());
   		}
          
     	 json.put("status", "success");
@@ -250,7 +308,7 @@ public class FlightRest {
     @Path("/findByArrivalBetween")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+
     public Response findByArrivalBetween(@QueryParam("datetimeFromPara") Date datetimeFromPara, @QueryParam("datetimeToPara") Date datetimeToPara){
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
@@ -259,10 +317,11 @@ public class FlightRest {
 		try {
 			Date datetimeFrom = df.parse(datetimeFromPara.toString().replace("-", "/"));
 			Date datetimeTo = df.parse(datetimeToPara.toString().replace("-", "/"));
-			json.put("flights", flightService.findByArrivalBetween(datetimeFrom, datetimeTo));
-		} catch (ParseException e) {
+			json.put("flights",mapper.writeValueAsString( flightService.findByArrivalBetween(datetimeFrom, datetimeTo)));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			json.put("error", e.toString());
 		}
           
          
@@ -277,17 +336,18 @@ public class FlightRest {
     @Path("/findByDepartureBetween")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+   
     public Response findByDepartureBetween(@QueryParam("datetimeFromPara") Date datetimeFromPara, @QueryParam("datetimeToPara") Date datetimeToPara){
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
           try {
   			Date datetimeFrom = df.parse(datetimeFromPara.toString().replace("-", "/"));
   			Date datetimeTo = df.parse(datetimeToPara.toString().replace("-", "/"));
-  			 json.put("flights", flightService.findByDepartureBetween( datetimeFrom,  datetimeTo));
-  		} catch (ParseException e) {
+  			 json.put("flights",mapper.writeValueAsString( flightService.findByDepartureBetween( datetimeFrom,  datetimeTo)));
+  		} catch (Exception e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
+  			json.put("error", e.toString());
   		}
             
          

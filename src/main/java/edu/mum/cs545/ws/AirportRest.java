@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 //import org.json.JSONObject;
@@ -27,7 +27,7 @@ import java.util.List;
 @Named
 @Path("airport")
 public class AirportRest {
-
+	ObjectMapper mapper = new ObjectMapper();
     @Inject
     private AirportService airportService;
   
@@ -58,7 +58,14 @@ public class AirportRest {
     	  JSONObject json = new JSONObject();
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
-         json.put("airports", airportService.findAll());
+      
+         try {
+ 			json.put("airports",mapper.writeValueAsString(airportService.findAll()) );
+ 		} catch (Exception e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 			 json.put("error", e.toString());
+ 		}
          return Response.ok(json.toString()).build();
     	
        
