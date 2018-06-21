@@ -39,11 +39,6 @@ public class AirPlaneRest {
     public Response   createAirPlane(Airplane airPlane){
 
     	airPlaneService.create(airPlane);
-    	for(int i=0;i<airPlane.getFlights().size();i++)
-    	{
-    		flightService.create(airPlane.getFlights().get(i));	
-    	}
-    	
         JSONObject json = new JSONObject();
 
         json.put("status", "success");
@@ -67,12 +62,14 @@ public class AirPlaneRest {
        
     }
     
-    @POST
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @DELETE
+    @Path("/{id}")
+   
     @Produces(MediaType.APPLICATION_JSON)
-    public Response  deleteAirPlane(Airplane airPlane){
+    public Response  deleteAirPlane(@PathParam("id") long id){
 
+    	Airplane airPlane =new Airplane();
+    	airPlane.setId(id);
     	airPlaneService.delete(airPlane);
         JSONObject json = new JSONObject();
 
@@ -97,14 +94,15 @@ public class AirPlaneRest {
 
     }
     
-    @Path("/find")
-    @POST
+    @Path("/find/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response findSpecificAirplane(Airplane airPlane) {
+    
+    public Response findSpecificAirplane(@PathParam("id") long id) {
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
-
+          Airplane airPlane =new Airplane();
+      	  airPlane.setId(id);
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
@@ -142,14 +140,16 @@ public class AirPlaneRest {
     	
        
     }
-    @Path("/findByFlight")
-    @POST
+    @Path("/findByFlight/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getByFlight(Flight flight) {
+
+    public Response getByFlight(@PathParam("id") long id) {
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
 
+          Flight flight = new Flight();
+          flight.setId(id);
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());

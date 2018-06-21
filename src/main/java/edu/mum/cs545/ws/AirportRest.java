@@ -64,12 +64,13 @@ public class AirportRest {
        
     }
     
-    @POST
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @DELETE
+    @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response   deleteAirport(Airport airport){
+    public Response   deleteAirport(@PathParam("id") long id){
 
+    	Airport airport= new Airport();
+    	airport.setId(id);
     	airportService.delete(airport);
         JSONObject json = new JSONObject();
 
@@ -94,14 +95,15 @@ public class AirportRest {
 
     }
     
-    @Path("/getAirport")
-    @POST
+    @Path("/getAirport/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getSpecificAirLine(Airport airport) {
+   
+    public Response getSpecificAirLine(@PathParam("id") long id) {
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
-
+          Airport airport= new Airport();
+      	  airport.setId(id);
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
@@ -127,14 +129,15 @@ public class AirportRest {
     }
     
     
-    @Path("/findByArrival")
-    @POST
+    @Path("/findByArrival/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response findByArrival(Flight flight) {
+    
+    public Response findByArrival(@PathParam("id") long id) {
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
-
+          Flight flight = new Flight();
+          flight.setId(id);
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());
@@ -146,14 +149,15 @@ public class AirportRest {
     }
     
     
-    @Path("/findByDeparture")
-    @POST
+    @Path("/findByDeparture/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response findByDeparture(Flight flight) {
+   
+    public Response findByDeparture(@PathParam("id") long id) {
     	  JSONObject json = new JSONObject();
           Gson gson = new Gson();
-
+          Flight flight = new Flight();
+          flight.setId(id);
          
     	 json.put("status", "success");
          json.put("code", Response.Status.OK.getStatusCode());

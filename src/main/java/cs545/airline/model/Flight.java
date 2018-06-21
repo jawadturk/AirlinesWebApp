@@ -14,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @XmlRootElement 
 @Entity
@@ -30,6 +32,7 @@ public class Flight {
 	private Date arrivalDate;
 	@Temporal(TemporalType.TIME)
 	private Date arrivalTime;
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Airline airline;
 	@ManyToOne(cascade = CascadeType.PERSIST)
